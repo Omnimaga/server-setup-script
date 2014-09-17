@@ -1,0 +1,3 @@
+%ircd ALL=(ALL) NOPASSWD: /home/ircd/bin/unreal
+%ircd ALL=(ALL) NOPASSWD: /home/ircd/bin/anoperc
+%ircd ALL=(ALL) NOPASSWD: /home/ircd/bin/denorarc

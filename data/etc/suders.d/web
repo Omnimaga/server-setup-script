@@ -1,0 +1,4 @@
+ircd%web ALL=(ALL) NOPASSWD: /home/eeems/bin/apachelog
+%web ALL=(ALL) /usr/sbin/service apache2 *
+%web ALL=(ALL) /usr/sbin/service mysql *
+%web ALL=(ALL) NOPASSWD: /home/eeems/bin/mysqllog
