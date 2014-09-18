@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Functions for logging
 section(){
 	echo "=> Starting Section \"$@\"";
 }
@@ -28,7 +28,7 @@ if [ "$(id -u)" != "0" ]; then
 	sudo $0;
 	exit;
 fi;
-
+# Actually run the install
 section "Package Installation";
 log "LAMP Stack";
 install lamp-server^;
