@@ -38,6 +38,8 @@ log "SSH Server";
 install ssh;
 log "Git";
 install git;
+log "htop";
+install htop;
 
 section "Custom Packages";
 log "Omnimaga-Server-Utils";
