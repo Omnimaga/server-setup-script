@@ -1,0 +1,8 @@
+server-id		= __SERVER_ID__
+log_bin			= /var/log/mysql-bin.log
+binlog-do-db	= omnimaga_forums
+binlog-do-db	= ircd
+binlog-do-db	= ourl
+binlog-do-db	= ircdstats
+binlog-do-db	= wordpress
+bind-address	= 0.0.0.0
