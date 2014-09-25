@@ -9,39 +9,61 @@ REGISTER_URL="http://api.omnimaga.org/register/$ENVIROMENT";
 PHPMYADMIN_URL="http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.2.9/phpMyAdmin-4.2.9-english.tar.xz";
 # Functions for logging
 section(){
+# section <message>
 	echo "=> Starting Section \"$@\"";
 }
 log(){
+# log <message>
 	echo "|-> $@";
 }
 sublog(){
+# sublog <message>
 	echo "|--> $@";
 }
 info(){
+# info <message>
 	echo "|-> INFO: $@";
 }
 subinfo(){
+# subinfo <message>
 	echo "|--> INFO $@";
 }
 install(){
+# install <packages>
 	apt-get -qq install $@;
 }
 updatesudo(){
-	if visudo -q -c -fdata/etc/$@;then
-		cp data/etc/$@ /etc/$@;
+# updatesudo <path>
+	if visudo -q -c -fdata/etc/$1;then
+		cp data/etc/$1 /etc/$1;
 	fi;
+}
+site(){
+# site <site>
+	cp data/etc/apache2/sites-available/$1.conf /etc/apache2/sites-available/$1.conf;
+	a2ensite $1;
+}
+host(){
+# host <host> [<ip>]
+	local ip=$2;
+	if [[ "$ip" == "" ]];then
+		ip="127.0.0.1";
+	fi;
+	HOSTS=$HOSTS"$ip\t$1\n";
 }
 download(){
 	local url=$1;
+	local path=$2;
 	echo -n "    ";
-	wget --progress=dot $url 2>&1 | grep --line-buffered "%" | sed -u -e "s,\.,,g" | awk '{printf("\b\b\b\b%4s", $2)}';
+	wget --progress=dot $url -O $path 2>&1 | grep --line-buffered "%" | sed -u -e "s,\.,,g" | awk '{printf("\b\b\b\b%4s", $2)}';
 	echo -ne "\b\b\b\b";
 }
 clone(){
 	git clone -q $1 $2;
 }
 # Make sure the script is running as root
-if [ "$(id -u)" != "0" ]; then
+if [ "$(id -u)" != "0" ];then
+	echo "Running with sudo";
 	sudo $0;
 	exit;
 fi;
@@ -56,6 +78,7 @@ if [[ "$(cat $TMP/hostname)" == "" ]];then
 	hostname > $TMP/hostname;
 fi;
 hostname $(cat $TMP/hostname);
+HOSTS="127.0.0.1\tlocalhost\n127.0.0.1\t$(hostname)\n::1\t\tlocalhost ip6-localhost ip6-loopback\nff02::1\t\tip6-allnodes\nff02::2\t\tip6-allrouters\n";
 cp $TMP/hostname /etc/hostname;
 sublog "MySQL ID";
 download "$REGISTER_URL/mysql-id" $TMP/mysql-id;
@@ -94,6 +117,8 @@ sublog "Copying";
 mkdir -p /var/www/phpmyadmin/;
 cp -R $TMP/phpMyAdmin-*/{*,.[a-zA-Z0-9]*} /var/www/phpmyadmin/;
 cp data/var/www/phpmyadmin/config.inc.php /var/www/phpmyadmin/;
+chown www-data:www-data /var/www/phpmyadmin -R;
+log "omnimaga";
 
 section "Config";
 log "Setting up sudoers";
@@ -107,3 +132,15 @@ groupadd -f ircd;
 updatesudo sudoers.d/ircd;
 sublog "mysqld";
 cp data/etc/mysql/conf.d/replication.cnf /etc/mysql/conf.d/replication.cnf;
+service mysql reload;
+sublog "apache2";
+a2enmod -q vhost_alias;
+a2enmod -q rewrite;
+site omnimaga;
+site pma;
+service apache2 reload;
+sublog "hosts";
+host omnimaga.org;
+host www.omnimaga.org;
+host pma.omnimaga.org;
+echo -e $HOSTS > /etc/hosts;
