@@ -14,7 +14,7 @@
 	$cfg['Servers'][$i]['ssl'] = true;
 	$cfg['Servers'][$i]['user'] = 'root';
 	$cfg['Servers'][$i]['password'] = '';
-	$cfg['Servers'][$i]['pmadb'] = true;
+	$cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
 	$cfg['Servers'][$i]['relation'] = 'pma__relation';
 	$cfg['Servers'][$i]['table_info'] = 'pma__table_info';
 	$cfg['Servers'][$i]['table_coords'] = 'pma__table_coords';
