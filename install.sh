@@ -108,6 +108,7 @@ log "openssl";
 install openssl;
 log "build tools";
 install build-essential;
+install libcurl4-openssl-dev;
 
 section "Custom Packages";
 log "Omnimaga-Server-Utils";
@@ -158,6 +159,8 @@ updatesudo sudoers.d/web;
 sublog "ircd";
 groupadd -f ircd;
 updatesudo sudoers.d/ircd;
+sublog "admin";
+groupadd -f admin;
 log "Services";
 sublog "mysqld";
 cp data/etc/mysql/conf.d/replication.cnf /etc/mysql/conf.d/replication.cnf;
