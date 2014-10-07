@@ -6,7 +6,7 @@ if [[ "$1" != "" ]];then
 	ENVIROMENT="$1";
 fi;
 REGISTER_URL="http://api.omnimaga.org/register/$ENVIROMENT";
-PHPMYADMIN_URL="http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.2.9/phpMyAdmin-4.2.9-english.tar.xz";
+PHPMYADMIN_URL="http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.2.9/phpMyAdmin-4.2.9.1-english.tar.xz";
 # Functions for logging
 section(){
 # section <message>
@@ -77,6 +77,10 @@ download "$REGISTER_URL/hostname" $TMP/hostname;
 if [[ "$(cat $TMP/hostname)" == "" ]];then
 	hostname > $TMP/hostname;
 fi;
+download "$REGISTER_URL/replication_id" $TMP/replication_id;
+if [[ "$(cat $TMP/replication_id)" == "" ]];then
+	echo 1 > $TMP/replication_id;
+fi;
 hostname $(cat $TMP/hostname);
 HOSTS="127.0.0.1\tlocalhost\n127.0.0.1\t$(hostname)\n::1\t\tlocalhost ip6-localhost ip6-loopback\nff02::1\t\tip6-allnodes\nff02::2\t\tip6-allrouters\n";
 cp $TMP/hostname /etc/hostname;
@@ -135,6 +139,7 @@ updatesudo sudoers.d/ircd;
 log "Services";
 sublog "mysqld";
 cp data/etc/mysql/conf.d/replication.cnf /etc/mysql/conf.d/replication.cnf;
+sed -i "s/__SERVER_ID__/$(cat $TMP/replication_id)/" /etc/mysql/conf.d/replication.cnf;
 service mysql reload;
 sublog "apache2";
 a2enmod -q vhost_alias;
@@ -158,4 +163,4 @@ echo -e $HOSTS > /etc/hosts;
 sublog "phpmyadmin";
 echo -n "root@localhost mysql pass:";
 read -s pass;
-cat /var/www/phpmyadmin/examples/create_tables.sql | mysql -u root -p "$pass";
+cat /var/www/phpmyadmin/examples/create_tables.sql | mysql -u root -p"$pass";
