@@ -108,7 +108,6 @@ log "openssl";
 install openssl;
 log "build tools";
 install build-essential;
-install libcurl4-openssl-dev
 
 section "Custom Packages";
 log "Omnimaga-Server-Utils";
