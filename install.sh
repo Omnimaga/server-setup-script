@@ -155,3 +155,7 @@ host omnimaga.org;
 host www.omnimaga.org;
 host pma.omnimaga.org;
 echo -e $HOSTS > /etc/hosts;
+sublog "phpmyadmin";
+echo -n "root@localhost mysql pass:";
+read -s pass;
+cat /var/www/phpmyadmin/examples/create_tables.sql | mysql -u root -p "$pass";
