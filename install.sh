@@ -182,3 +182,5 @@ sublog "phpmyadmin";
 echo -n "root@localhost mysql pass:";
 read -s pass;
 cat /var/www/phpmyadmin/examples/create_tables.sql | mysql -u root -p"$pass";
+echo -e "\n\n\n";
+echo "Install Finished";
