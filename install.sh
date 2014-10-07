@@ -127,7 +127,7 @@ sublog "Extracting";
 tar -C $TMP/ -xf $TMP/pma.tar.xz;
 sublog "Copying";
 mkdir -p /var/www/phpmyadmin/;
-rm -rf * /var/www/phpmyadmin/*;
+rm -rf /var/www/phpmyadmin/*;
 cp -R $TMP/phpMyAdmin-*/{*,.[a-zA-Z0-9]*} /var/www/phpmyadmin/;
 cp data/var/www/phpmyadmin/config.inc.php /var/www/phpmyadmin/;
 chown www-data:www-data /var/www/phpmyadmin -R;
