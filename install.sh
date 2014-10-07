@@ -143,6 +143,7 @@ cp -R $TMP/Unreal*/{*,.[a-zA-Z0-9]*} /opt/unrealircd;
 cp data/opt/unrealircd/config.settings /opt/unrealircd;
 pushd $(pwd);
 cd /opt/unrealircd;
+./curlinstall;
 ./Config -quick -nointro;
 make;
 popd;
