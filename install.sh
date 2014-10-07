@@ -6,7 +6,7 @@ if [[ "$1" != "" ]];then
 	ENVIROMENT="$1";
 fi;
 REGISTER_URL="http://api.omnimaga.org/register/$ENVIROMENT";
-PHPMYADMIN_URL="http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.2.9/phpMyAdmin-4.2.9.1-english.tar.xz";
+PHPMYADMIN_URL="http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.2.9.1/phpMyAdmin-4.2.9.1-english.tar.xz";
 UNREALIRCD_URL="https://www.unrealircd.org/downloads/Unreal3.2.10.4.tar.gz";
 # Functions for logging
 section(){
