@@ -1,3 +1,4 @@
+[mysqld]
 server-id		= __SERVER_ID__
 log_bin			= /var/log/mysql-bin.log
 binlog-do-db	= omnimaga_forums
