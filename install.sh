@@ -69,10 +69,13 @@ if [ "$(id -u)" != "0" ];then
 	exit;
 fi;
 # Actually run the install
+section "Prep";
+TMP="$TMP/temp/";
+mkdir -p $TMP;
+rm -rf $TMP/*;
 
 section "Registering";
 log "Getting IDs";
-mkdir -p /tmp/omni-setup;
 sublog "Hostname";
 download "$REGISTER_URL/hostname" $TMP/hostname;
 if [[ "$(cat $TMP/hostname)" == "" ]];then
