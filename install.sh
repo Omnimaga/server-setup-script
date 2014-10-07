@@ -7,6 +7,7 @@ if [[ "$1" != "" ]];then
 fi;
 REGISTER_URL="http://api.omnimaga.org/register/$ENVIROMENT";
 PHPMYADMIN_URL="http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.2.9/phpMyAdmin-4.2.9.1-english.tar.xz";
+UNREALIRCD_URL="https://www.unrealircd.org/downloads/Unreal3.2.10.4.tar.gz";
 # Functions for logging
 section(){
 # section <message>
@@ -100,6 +101,11 @@ log "htop";
 install htop;
 log "zsh";
 install zsh;
+log "openssl";
+install openssl;
+log "build tools";
+install build-essential;
+install libcurl4-openssl-dev
 
 section "Custom Packages";
 log "Omnimaga-Server-Utils";
@@ -124,7 +130,18 @@ mkdir -p /var/www/phpmyadmin/;
 cp -R $TMP/phpMyAdmin-*/{*,.[a-zA-Z0-9]*} /var/www/phpmyadmin/;
 cp data/var/www/phpmyadmin/config.inc.php /var/www/phpmyadmin/;
 chown www-data:www-data /var/www/phpmyadmin -R;
-log "omnimaga";
+log "unrealircd";
+download $UNREALIRCD_URL $TMP/unreal.tar.gz;
+adduser --system --no-create-home ircd;
+mkdir -p /opt/unrealircd;
+tar -C $TMP/ -xf $TMP/unreal.tar.gz
+cp -R $TMP/Unreal*/{*,.[a-zA-Z0-9]*} /opt/unrealircd;
+cp data/opt/unrealircd/config.settings /opt/unrealircd;
+pushd;
+cd /opt/unrealircd;
+./Config -quick -nointro;
+make;
+popd;
 
 section "Config";
 log "Sudoers";
@@ -158,7 +175,8 @@ done;
 sublog "hosts";
 host omnimaga.org;
 host www.omnimaga.org;
-host pma.omnimaga.org;
+host $(hostname).omnimaga.org;
+host pma.$(hostname).omnimaga.org;
 echo -e $HOSTS > /etc/hosts;
 sublog "phpmyadmin";
 echo -n "root@localhost mysql pass:";
