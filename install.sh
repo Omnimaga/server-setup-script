@@ -139,7 +139,7 @@ tar -C $TMP/ -xf $TMP/unreal.tar.gz
 rm -rf /opt/unrealircd/*;
 cp -R $TMP/Unreal*/{*,.[a-zA-Z0-9]*} /opt/unrealircd;
 cp data/opt/unrealircd/config.settings /opt/unrealircd;
-pushd;
+pushd $(pwd);
 cd /opt/unrealircd;
 ./Config -quick -nointro;
 make;
