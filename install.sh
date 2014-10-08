@@ -1,6 +1,6 @@
 #!/bin/bash
 # Config
-ENVIROMENT="prod";
+ENVIROMENT="dev";
 TMP="/tmp/omni-setup";
 if [[ "$1" != "" ]];then
 	ENVIROMENT="$1";
@@ -56,6 +56,7 @@ download(){
 	local url=$1;
 	local path=$2;
 	echo -n "    ";
+	rm -f $2;
 	wget --progress=dot $url -O $path 2>&1 | grep --line-buffered "%" | sed -u -e "s,\.,,g" | awk '{printf("\b\b\b\b%4s", $2)}';
 	echo -ne "\b\b\b\b";
 }
@@ -84,10 +85,9 @@ if [[ "$(cat $TMP/hostname)" == "" ]];then
 		hostname > $TMP/hostname;
 	fi;
 fi;
+info "HOSTNAME SET TO $(cat $TMP/hostname)";
 download "$REGISTER_URL/replication_id" $TMP/replication_id;
-if [[ "$(cat $TMP/replication_id)" == "" ]];then
-	echo 1 > $TMP/replication_id;
-fi;
+info "REPLICATION ID SET TO $(cat $TMP/replication_id)";
 hostname $(cat $TMP/hostname);
 HOSTS="127.0.0.1\tlocalhost\n127.0.0.1\t$(hostname)\n::1\t\tlocalhost ip6-localhost ip6-loopback\nff02::1\t\tip6-allnodes\nff02::2\t\tip6-allrouters\n";
 cp $TMP/hostname /etc/hostname;
@@ -165,6 +165,7 @@ groupadd -f admin;
 log "Services";
 sublog "mysqld";
 cp data/etc/mysql/conf.d/replication.cnf /etc/mysql/conf.d/replication.cnf;
+sed -i "s/__SERVER_ID__/$(cat $TMP/replication_id)/" /etc/mysql/conf.d/replication.cnf;
 service mysql reload;
 sublog "apache2";
 a2enmod -q vhost_alias;
