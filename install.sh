@@ -79,7 +79,10 @@ log "Getting IDs";
 sublog "Hostname";
 download "$REGISTER_URL/hostname" $TMP/hostname;
 if [[ "$(cat $TMP/hostname)" == "" ]];then
-	hostname > $TMP/hostname;
+	download "$REGISTER_URL/name/$(hostname)" $TMP/hostname;
+	if [[ "$(cat $TMP/hostname)" == "" ]];then
+		hostname > $TMP/hostname;
+	fi;
 fi;
 download "$REGISTER_URL/replication_id" $TMP/replication_id;
 if [[ "$(cat $TMP/replication_id)" == "" ]];then
@@ -88,8 +91,6 @@ fi;
 hostname $(cat $TMP/hostname);
 HOSTS="127.0.0.1\tlocalhost\n127.0.0.1\t$(hostname)\n::1\t\tlocalhost ip6-localhost ip6-loopback\nff02::1\t\tip6-allnodes\nff02::2\t\tip6-allrouters\n";
 cp $TMP/hostname /etc/hostname;
-sublog "MySQL ID";
-download "$REGISTER_URL/mysql-id" $TMP/mysql-id;
 
 section "Package Installation";
 log "LAMP Stack";
