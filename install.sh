@@ -179,8 +179,10 @@ sublog "shell";
 cp data/etc/adduser.conf /etc/adduser.conf;
 cp data/etc/default/useradd /etc/default/useradd;
 grep -v nologin /etc/passwd | grep -v /bin/false | grep -v /bin/sync | grep -v /var/lib/libuuid | cut -d : -f 1 | while read user;do
-	chsh -s /bin/zsh $user;
-	info "Changed shell for $user";
+	if [[ "$user" != "root" ]];then
+		chsh -s /bin/zsh $user;
+		info "Changed shell for $user";
+	fi;
 done;
 sublog "hosts";
 host omnimaga.org;
