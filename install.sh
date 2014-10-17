@@ -117,13 +117,12 @@ sublog "Creating directories";
 mkdir /opt/omnimaga/bin -p;
 chown root:users /opt/omnimaga/bin;
 sublog "Adding to path";
-echo "export PATH=$PATH:/opt/omnimaga/bin;" > /etc/profile.d/omnimaga-server-utils.sh;
+echo "export PATH=\$PATH:/opt/omnimaga/bin;" > /etc/profile.d/omnimaga-server-utils.sh;
 . /etc/profile.d/omnimaga-server-utils.sh;
 sublog "getting files";
 rm -rf /opt/omnimaga/bin;
 clone https://github.com/Omnimaga/server-utils.git /opt/omnimaga/bin/;
 chmod a+x /opt/omnimaga/bin/*;
-subinfo "Add users to the group omnimaga-utils to allow access";
 log "phpmyadmin";
 sublog "Downloading";
 download $PHPMYADMIN_URL $TMP/pma.tar.xz;
@@ -182,7 +181,6 @@ grep -v nologin /etc/passwd | grep -v /bin/false | grep -v /bin/sync | grep -v /
 	if [[ "$user" != "root" ]];then
 		chsh -s /bin/zsh $user;
 		info "Changed shell for $user";
-	fi;
 done;
 sublog "hosts";
 host omnimaga.org;
