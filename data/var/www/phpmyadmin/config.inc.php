@@ -36,7 +36,7 @@
 
 	/* End of servers configuration */
 
-	$cfg['blowfish_secret'] = 'sEF45WT2LQEcxzUj$';
+	$cfg['blowfish_secret'] = 'sEF45WT2LQEcxzUj$'; // Changeme
 	$cfg['UploadDir'] = '';
 	$cfg['SaveDir'] = '';
 	$cfg['ShowDbStructureCreation'] = true;
